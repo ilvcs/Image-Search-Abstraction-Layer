@@ -4,7 +4,12 @@
 // init project
 var express = require('express');
 var app = express();
-var Bing = require('node-bing-api')({ accKey: "30082622732a44c1a12c27ae1de222fd" });
+var keys = {'Key1': 'a6fd286a787d443dbfb2eec149e3ee97',
+
+'Key2': '30082622732a44c1a12c27ae1de222fd'}
+var Bing = require('node-bing-api')({ accKey: keys['Key2']});
+var request = require('request');
+
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -13,18 +18,21 @@ var Bing = require('node-bing-api')({ accKey: "30082622732a44c1a12c27ae1de222fd"
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
-   response.send("Hello")
+app.get("/", function (req, res) {
+   res.send("Hello")
 });
 
 
 app.get("/images", function (request, response) {
-   Bing.images("Ninja Turtles", {
-  count: 15,   // Number of results (max 50) 
-  offset: 3    // Skip first 3 result 
-  }, function(error, res, body){
+  var options = {
+  url: 'https://api.cognitive.microsoft.com/bing/v7.0/images',
+   headers : {
+            'Ocp-Apim-Subscription-Key' : keys['Key2'],
+   }
+};
+  request(options, function(err,res,body){
     console.log(body);
-  });
+  })
 });
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
