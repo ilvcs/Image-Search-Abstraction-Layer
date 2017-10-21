@@ -23,16 +23,16 @@ app.get("/", function (req, res) {
 });
 
 
-app.get("/images", function (request, response) {
+app.get("/images", function (req, res) {
   var options = {
-  url: 'https://api.cognitive.microsoft.com/bing/v7.0/images',
+  url: 'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=cats&count=3',
    headers : {
             'Ocp-Apim-Subscription-Key' : keys['Key2'],
    }
 };
-  request(options, function(err,res,body){
-    console.log(body);
-  })
+  request(options, function(err,resp,body){
+    res.send(JSON.parse(body));
+  });
 });
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
